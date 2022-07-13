@@ -1,0 +1,25 @@
+{
+  "name": "v2ex-robot",
+  "version": "1.0.0",
+  "description": "[English Document](./README-EN.md)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "ts-node": "^10.8.2"
+  },
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^5.0.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1",
+    "release-it": "^15.1.1"
+  }
+}

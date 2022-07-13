@@ -1,0 +1,22 @@
+name: robot
+ 
+on:
+  workflow_dispatch:
+  schedule:
+    # Beijing Time 08:45, every other day, reference https://crontab.guru/ and https://datetime360.com/cn/utc-beijing-time/
+    - cron: '45 0 */2 * *' 
+
+jobs:
+  robot:
+    name: robot
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v1
+      
+      - name: 'Set env'
+        run: |
+          echo "V2EX_SESSION=${{ secrets.V2EX_SESSION }}" >> $GITHUB_ENV
+      
+      - name: 'Check in'
+        run: npm i --silent && npm run start

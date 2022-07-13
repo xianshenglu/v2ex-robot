@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended","prettier"],
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-unused-vars": ["error", { "vars": "all", "args": "off", "ignoreRestSiblings": false }],
+    "no-empty": ["error", { "allowEmptyCatch": true }]
+  }
+}
