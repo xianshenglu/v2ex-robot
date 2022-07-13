@@ -51,10 +51,6 @@ export class V2exJobManage {
       this.notification.notify(formattedError);
     }
   }
-  onPostJobFailed(error: any) {
-    const er;
-    this.notification.notify(new Error(error.message));
-  }
 
   private async postJob(data: PostJobBody) {
     const response = await httpClient.request({
