@@ -12,10 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v1
-      
-      - name: 'Set env'
-        run: echo "V2EX_SESSION=${{ secrets.V2EX_SESSION }}" >> $GITHUB_ENV
+        uses: actions/checkout@v1 
       
       - name: 'Setup Node'
         uses: actions/setup-node@v3
@@ -23,4 +20,6 @@ jobs:
           node-version: 18
       
       - name: 'Run App'
-        run: npm i --silent && npm run start
+        env:
+          V2EX_SESSION: ${{ secrets.V2EX_SESSION }}
+        run: npm i --silent && npm run start     
