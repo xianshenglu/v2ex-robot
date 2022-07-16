@@ -42,7 +42,8 @@ export class V2exJobManage {
       return;
     }
     try {
-      await this.postJob(body);
+     const response = await this.postJob(body);
+     
     } catch (error) {
       const formattedError = this.errorHandler.getFormattedError(
         error,
@@ -54,11 +55,12 @@ export class V2exJobManage {
 
   private async postJob(data: PostJobBody) {
     const response = await httpClient.request({
-      url: API_ORIGIN + "/new/jobs",
+      url: API_ORIGIN + "/write",
       method: "POST",
       data,
       headers: {
         ...this.v2exCommonApi.getSession(),
+        Referer: "https://v2ex.com/write?node=jobs",
       },
       transformRequest(data: PostJobBody) {
         /**
