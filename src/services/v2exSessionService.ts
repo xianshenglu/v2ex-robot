@@ -1,26 +1,16 @@
 import cookieParser from "set-cookie-parser";
+import { v2exHttpClient } from "../httpClients/v2exHttpClient";
 import { V2exCommonApi } from "./v2exCommonApi";
 export type Session = {
   Cookie: string
 }
 export class V2exSessionService {
   private v2exCommonApi = new V2exCommonApi();
-  private session: Session  | undefined;
-
-  async getSession() {
-    if (!this.session) {
-      await this.initSession();
-    }
-    return this.session;
-  }
-  private setSession(cookieStr: string) {
-    this.session = { Cookie: cookieStr };
-  }
   async initSession() {
     const response = await this.v2exCommonApi.getHomepage();
     const setCookiesHeaders = response.headers["set-cookie"] || [];
     const cookieStr = this.getSessionCookie(setCookiesHeaders);
-    this.setSession(cookieStr);
+    v2exHttpClient.defaults.headers.common.Cookie = cookieStr;
   }
 
   private getSessionCookie(setCookiesHeaders: string[]) {

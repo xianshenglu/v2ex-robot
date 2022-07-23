@@ -1,5 +1,5 @@
 import { NotificationService } from "./../notifications/index";
-import { httpClient, API_ORIGIN } from "../httpClient/httpClient";
+import { v2exHttpClient, V2EX_API_ORIGIN } from "../httpClients/v2exHttpClient";
 import { ErrorHandler } from "./errorHandler";
 import { JobSourceManage } from "./jobSourceManage";
 import { V2exSessionService } from "./v2exSessionService";
@@ -83,17 +83,16 @@ export class V2exJobManage {
       .join("+");
   }
   private async postJobApi(data: PostJobBody) {
-    const sessionHeader = await this.v2exSessionService.getSession();
+    await this.v2exSessionService.initSession();
 
     data.title = this.getEncodeJobData(data.title);
     data.content = this.getEncodeJobData(data.content);
-    const response = await httpClient.request({
-      url: API_ORIGIN + "/write",
+    const response = await v2exHttpClient.request({
+      url: V2EX_API_ORIGIN + "/write",
       method: "POST",
       data,
       headers: {
-        ...sessionHeader,
-        Referer: API_ORIGIN + "/write?node=jobs",
+        Referer: V2EX_API_ORIGIN + "/write?node=jobs",
       },
       transformRequest: this.serializeJobData.bind(this),
     });

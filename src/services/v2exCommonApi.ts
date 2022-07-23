@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { API_ORIGIN, httpClient } from "../httpClient/httpClient";
+import { V2EX_API_ORIGIN, v2exHttpClient } from "../httpClients/v2exHttpClient";
 import { Session } from "./v2exSessionService";
 
 export class V2exCommonApi {
@@ -10,9 +10,9 @@ export class V2exCommonApi {
     return this.mainSession;
   }
   async getHomepage() {
-    const response = await httpClient.request<null, AxiosResponse<string>>({
+    const response = await v2exHttpClient.request<null, AxiosResponse<string>>({
       method: "GET",
-      url: API_ORIGIN + "/",
+      url: V2EX_API_ORIGIN + "/",
       responseType: "text",
       headers: {
         ...this.getMainSession(),
