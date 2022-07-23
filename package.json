@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/index.ts",
+    "start:v2ex": "ts-node src/v2ex/index.ts",
+    "start:maimai": "ts-node src/maimai/index.ts",
     "release": "release-it --ci",
     "prepare": "husky install",
     "lint-staged": "lint-staged"

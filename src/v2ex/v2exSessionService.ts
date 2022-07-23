@@ -2,8 +2,8 @@ import cookieParser from "set-cookie-parser";
 import { v2exHttpClient } from "../httpClients/v2exHttpClient";
 import { V2exCommonApi } from "./v2exCommonApi";
 export type Session = {
-  Cookie: string
-}
+  Cookie: string;
+};
 export class V2exSessionService {
   private v2exCommonApi = new V2exCommonApi();
   async initSession() {
