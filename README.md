@@ -12,3 +12,7 @@
 
 - `V2EX_SESSION` v2ex 的 session, 登录账号后，在 devtool 里找到名字为 A2 的 cookie，将 value 贴进去，形如 `V2EX_SESSION=A2={your A2 value}`
 <!-- - `MASTER_EMAIL_ADDR` 签到失败时，发送错误信息的邮箱 -->
+- `ROBOT_EMAIL_ADDR` 发信息的机器人邮箱地址
+- `ROBOT_EMAIL_AUTH_CODE` 发信息的机器人邮箱授权密码（可以在邮箱的安全设置里找到，需要手动开启，然后复制粘贴过来）
+- `ROBOT_EMAIL_SMTP_ADDR` 发信息的机器人邮箱 SMTP 服务器地址（默认值 smtp.126.com）
+- `MASTER_EMAIL_ADDR` 接受信息的邮箱地址

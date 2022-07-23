@@ -1,7 +1,7 @@
+import { NotificationService } from './../notifications/index';
 import { httpClient, API_ORIGIN } from "../httpClient/httpClient";
 import { ErrorHandler } from "./errorHandler";
 import { JobSourceManage } from "./jobSourceManage";
-import { Notification } from "./notificatioinService";
 import { V2exCommonApi } from "./v2exCommonApi";
 import { JSDOM } from "jsdom";
 type PostJobBody = {
@@ -13,7 +13,7 @@ type PostJobBody = {
 export class V2exJobManage {
   private jobSourceManage = new JobSourceManage();
   private v2exCommonApi = new V2exCommonApi();
-  private notification = new Notification();
+  private notification = new NotificationService();
   private errorHandler = new ErrorHandler();
   private async getPostJobsBody(): Promise<PostJobBody> {
     const [{ title, header }, { data: jobsContent }, once] = await Promise.all([
