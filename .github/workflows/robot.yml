@@ -17,6 +17,10 @@ jobs:
       - name: 'Set env'
         run: |
           echo "V2EX_SESSION=${{ secrets.V2EX_SESSION }}" >> $GITHUB_ENV
+          echo "ROBOT_EMAIL_ADDR=${{ secrets.ROBOT_EMAIL_ADDR }}" >> $GITHUB_ENV
+          echo "ROBOT_EMAIL_AUTH_CODE=${{ secrets.ROBOT_EMAIL_AUTH_CODE }}" >> $GITHUB_ENV
+          echo "ROBOT_EMAIL_SMTP_ADDR=${{ secrets.ROBOT_EMAIL_SMTP_ADDR }}" >> $GITHUB_ENV
+          echo "MASTER_EMAIL_ADDR=${{ secrets.MASTER_EMAIL_ADDR }}" >> $GITHUB_ENV
       
       - name: 'Check in'
         run: npm i --silent && npm run start
