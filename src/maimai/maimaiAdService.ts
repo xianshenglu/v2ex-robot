@@ -2,10 +2,25 @@ import {
   maimaiHttpClient,
   MAIMAI_API_ORIGIN,
 } from "../httpClients/maimaiClient";
+import { NotificationService } from "../notifications";
+import { ErrorHandler } from "../services/errorHandler";
 const env = process.env;
 export class MaiMaiAdService {
-  postAd() {
-    maimaiHttpClient.request({
+  errorHandler = new ErrorHandler();
+  notification = new NotificationService();
+  async postAd() {
+    try {
+      const response = await this.postAdApi();
+    } catch (error) {
+      const formattedError = this.errorHandler.getFormattedError(
+        error,
+        "post maimai job failed"
+      );
+      this.notification.notify(formattedError);
+    }
+  }
+  postAdApi() {
+    return maimaiHttpClient.request({
       method: "POST",
       url:
         MAIMAI_API_ORIGIN +
