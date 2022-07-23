@@ -1,0 +1,28 @@
+name: maimai-robot
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Beijing Time 8:45/18:45, every day, reference https://crontab.guru/ and https://datetime360.com/cn/utc-beijing-time/
+    - cron: "45 0/10 * * *"
+
+jobs:
+  maimai-robot:
+    name: maimai-robot
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v1
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: "POST MAIMAI AD"
+        env:
+          MAIMAI_USER_ID: ${{ secrets.MAIMAI_USER_ID }}
+          MAIMAI_COOKIE_VALUE: ${{ secrets.MAIMAI_COOKIE_VALUE }}
+          MAIMAI_AD_TEXT: ${{ secrets.MAIMAI_AD_TEXT }}
+          MASTER_EMAIL_ADDR: ${{ secrets.MASTER_EMAIL_ADDR }}
+        run: npm i --silent && npm run start:maimai
