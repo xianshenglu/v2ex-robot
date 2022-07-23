@@ -2,8 +2,9 @@ import { NotificationService } from "./../notifications/index";
 import { httpClient, API_ORIGIN } from "../httpClient/httpClient";
 import { ErrorHandler } from "./errorHandler";
 import { JobSourceManage } from "./jobSourceManage";
-import { V2exCommonApi } from "./v2exCommonApi";
+import { V2exSessionService } from "./v2exSessionService";
 import { JSDOM } from "jsdom";
+import { V2exCommonApi } from "./v2exCommonApi";
 type PostJobBody = {
   syntax: "markdown";
   once: number;
@@ -13,6 +14,7 @@ type PostJobBody = {
 };
 export class V2exJobManage {
   private jobSourceManage = new JobSourceManage();
+  private v2exSessionService = new V2exSessionService();
   private v2exCommonApi = new V2exCommonApi();
   private notification = new NotificationService();
   private errorHandler = new ErrorHandler();
@@ -20,7 +22,7 @@ export class V2exJobManage {
     const [{ title, header }, { data: jobsContent }, once] = await Promise.all([
       this.jobSourceManage.getJobsTitleAndHeader(),
       this.jobSourceManage.getJobsContent(),
-      this.v2exCommonApi.getOnceParam(),
+      this.getOnceParam(),
     ]);
 
     return {
@@ -32,6 +34,15 @@ export class V2exJobManage {
     };
   }
 
+  async getOnceParam() {
+    const response = await this.v2exCommonApi.getHomepage();
+    const { data: html } = response;
+    const onceMatch = html.match(/once=([^"']+)["']/);
+    if (!onceMatch) {
+      return Promise.reject(new Error("can not get once param"));
+    }
+    return Number(onceMatch[1]);
+  }
   async postJobAd() {
     let body: PostJobBody;
     try {
@@ -72,6 +83,8 @@ export class V2exJobManage {
       .join("+");
   }
   private async postJobApi(data: PostJobBody) {
+    const sessionHeader = await this.v2exSessionService.getSession();
+
     data.title = this.getEncodeJobData(data.title);
     data.content = this.getEncodeJobData(data.content);
     const response = await httpClient.request({
@@ -79,7 +92,7 @@ export class V2exJobManage {
       method: "POST",
       data,
       headers: {
-        ...this.v2exCommonApi.getSession(),
+        ...sessionHeader,
         Referer: API_ORIGIN + "/write?node=jobs",
       },
       transformRequest: this.serializeJobData.bind(this),

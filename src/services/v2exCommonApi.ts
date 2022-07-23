@@ -1,29 +1,23 @@
 import { AxiosResponse } from "axios";
-import { httpClient, API_ORIGIN } from "../httpClient/httpClient";
+import { API_ORIGIN, httpClient } from "../httpClient/httpClient";
+import { Session } from "./v2exSessionService";
 
 export class V2exCommonApi {
-  getSession(){
-    return {
-      Cookie: process.env.V2EX_SESSION as string,
-    };
+  private mainSession: Session = {
+    Cookie: process.env.V2EX_SESSION as string,
+  };
+  private getMainSession() {
+    return this.mainSession;
   }
-  private async getOnceParamApi() {
-    const html = await httpClient.request<null, AxiosResponse<string>>({
+  async getHomepage() {
+    const response = await httpClient.request<null, AxiosResponse<string>>({
       method: "GET",
       url: API_ORIGIN + "/",
       responseType: "text",
       headers: {
-        ...this.getSession()
+        ...this.getMainSession(),
       },
     });
-    return html;
-  }
-  async getOnceParam() {
-    const { data: html } = await this.getOnceParamApi();
-    const onceMatch = html.match(/once=([^"']+)["']/);
-    if (!onceMatch) {
-      return Promise.reject(new Error("can not get once param"));
-    }
-    return Number(onceMatch[1]);
+    return response;
   }
 }
