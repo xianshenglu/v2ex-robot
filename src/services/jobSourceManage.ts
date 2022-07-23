@@ -1,12 +1,15 @@
 import { AxiosResponse } from "axios";
-import { httpClient } from "../httpClient/httpClient";
+import { githubHttpClient } from "../httpClients/githubHttpClient";
 
 export class JobSourceManage {
   JOB_BASE_URL =
     "https://raw.githubusercontent.com/xianshenglu/microfocus-hiring/main";
 
   async getJobsTitleAndHeader() {
-    const response = await httpClient.request<null, AxiosResponse<string>>({
+    const response = await githubHttpClient.request<
+      null,
+      AxiosResponse<string>
+    >({
       url: this.JOB_BASE_URL + "/header-encoded.md",
       method: "GET",
     });
@@ -17,7 +20,7 @@ export class JobSourceManage {
     };
   }
   async getJobsContent() {
-    return httpClient.request({
+    return githubHttpClient.request({
       url: this.JOB_BASE_URL + "/jd-list-simple.md",
       method: "GET",
     });

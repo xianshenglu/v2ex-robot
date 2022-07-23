@@ -1,17 +1,20 @@
-import { NotificationService } from './../notifications/index';
-import { httpClient, API_ORIGIN } from "../httpClient/httpClient";
+import { NotificationService } from "./../notifications/index";
+import { v2exHttpClient, V2EX_API_ORIGIN } from "../httpClients/v2exHttpClient";
 import { ErrorHandler } from "./errorHandler";
 import { JobSourceManage } from "./jobSourceManage";
-import { V2exCommonApi } from "./v2exCommonApi";
+import { V2exSessionService } from "./v2exSessionService";
 import { JSDOM } from "jsdom";
+import { V2exCommonApi } from "./v2exCommonApi";
 type PostJobBody = {
-  syntax: 1;
+  syntax: "markdown";
   once: number;
   title: string;
   content: string;
+  node_name: string;
 };
 export class V2exJobManage {
   private jobSourceManage = new JobSourceManage();
+  private v2exSessionService = new V2exSessionService();
   private v2exCommonApi = new V2exCommonApi();
   private notification = new NotificationService();
   private errorHandler = new ErrorHandler();
@@ -19,17 +22,27 @@ export class V2exJobManage {
     const [{ title, header }, { data: jobsContent }, once] = await Promise.all([
       this.jobSourceManage.getJobsTitleAndHeader(),
       this.jobSourceManage.getJobsContent(),
-      this.v2exCommonApi.getOnceParam(),
+      this.getOnceParam(),
     ]);
 
     return {
       title,
       content: header + jobsContent,
       once: once as any,
-      syntax: 1 as const,
+      syntax: "markdown" as const,
+      node_name: "jobs" as const,
     };
   }
 
+  async getOnceParam() {
+    const response = await this.v2exCommonApi.getHomepage();
+    const { data: html } = response;
+    const onceMatch = html.match(/once=([^"']+)["']/);
+    if (!onceMatch) {
+      return Promise.reject(new Error("can not get once param"));
+    }
+    return Number(onceMatch[1]);
+  }
   async postJobAd() {
     let body: PostJobBody;
     try {
@@ -63,25 +76,34 @@ export class V2exJobManage {
       return Promise.reject(new Error(problem.innerHTML));
     }
   }
+  private getEncodeJobData(data: string) {
+    return data
+      .split(/ /)
+      .map((str) => encodeURIComponent(str))
+      .join("+");
+  }
   private async postJobApi(data: PostJobBody) {
-    const response = await httpClient.request({
-      url: API_ORIGIN + "/write",
+    await this.v2exSessionService.initSession();
+
+    data.title = this.getEncodeJobData(data.title);
+    data.content = this.getEncodeJobData(data.content);
+    const response = await v2exHttpClient.request({
+      url: V2EX_API_ORIGIN + "/write",
       method: "POST",
       data,
       headers: {
-        ...this.v2exCommonApi.getSession(),
-        Referer: API_ORIGIN + "/write?node=jobs",
+        Referer: V2EX_API_ORIGIN + "/write?node=jobs",
       },
-      transformRequest(data: PostJobBody) {
-        /**
-         * @todo
-         * URLSearchParams use the encodeURIComponent, but encodeURIComponent only get a similar value,
-         * compared to original site, not identical. So, may need improve
-         */
-        const searchPrams = new URLSearchParams(data as any);
-        return searchPrams.toString();
-      },
+      transformRequest: this.serializeJobData.bind(this),
     });
     return response;
+  }
+  private serializeJobData(data: PostJobBody) {
+    let result = `title=${data.title}&syntax=${data.syntax}&content=${data.content}&node_name=${data.node_name}&content=${data.content}&once=${data.once}`;
+    // Object.entries(data).forEach(([key, val]) => {
+    //   result += `${key}=${val}&`;
+    // });
+    // result = result.replace(/&$/, "");
+    return result;
   }
 }
