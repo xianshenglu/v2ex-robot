@@ -11,7 +11,7 @@ export class DummyNotification extends NotificationBase {
     },
     callback?: (error: Error | null, info?: any) => void
   ) {
-    console.log(message);
+    // console.log(message);
     callback && callback(null, null);
   }
 }
