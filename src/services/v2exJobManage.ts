@@ -1,14 +1,15 @@
-import { NotificationService } from './../notifications/index';
+import { NotificationService } from "./../notifications/index";
 import { httpClient, API_ORIGIN } from "../httpClient/httpClient";
 import { ErrorHandler } from "./errorHandler";
 import { JobSourceManage } from "./jobSourceManage";
 import { V2exCommonApi } from "./v2exCommonApi";
 import { JSDOM } from "jsdom";
 type PostJobBody = {
-  syntax: 1;
+  syntax: "markdown";
   once: number;
   title: string;
   content: string;
+  node_name: string;
 };
 export class V2exJobManage {
   private jobSourceManage = new JobSourceManage();
@@ -26,7 +27,8 @@ export class V2exJobManage {
       title,
       content: header + jobsContent,
       once: once as any,
-      syntax: 1 as const,
+      syntax: "markdown" as const,
+      node_name: "jobs" as const,
     };
   }
 
@@ -63,7 +65,15 @@ export class V2exJobManage {
       return Promise.reject(new Error(problem.innerHTML));
     }
   }
+  private getEncodeJobData(data: string) {
+    return data
+      .split(/ /)
+      .map((str) => encodeURIComponent(str))
+      .join("+");
+  }
   private async postJobApi(data: PostJobBody) {
+    data.title = this.getEncodeJobData(data.title);
+    data.content = this.getEncodeJobData(data.content);
     const response = await httpClient.request({
       url: API_ORIGIN + "/write",
       method: "POST",
@@ -72,16 +82,16 @@ export class V2exJobManage {
         ...this.v2exCommonApi.getSession(),
         Referer: API_ORIGIN + "/write?node=jobs",
       },
-      transformRequest(data: PostJobBody) {
-        /**
-         * @todo
-         * URLSearchParams use the encodeURIComponent, but encodeURIComponent only get a similar value,
-         * compared to original site, not identical. So, may need improve
-         */
-        const searchPrams = new URLSearchParams(data as any);
-        return searchPrams.toString();
-      },
+      transformRequest: this.serializeJobData.bind(this),
     });
     return response;
+  }
+  private serializeJobData(data: PostJobBody) {
+    let result = `title=${data.title}&syntax=${data.syntax}&content=${data.content}&node_name=${data.node_name}&content=${data.content}&once=${data.once}`;
+    // Object.entries(data).forEach(([key, val]) => {
+    //   result += `${key}=${val}&`;
+    // });
+    // result = result.replace(/&$/, "");
+    return result;
   }
 }
