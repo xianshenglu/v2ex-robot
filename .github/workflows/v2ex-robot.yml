@@ -1,29 +1,29 @@
-name: robot
- 
+name: v2ex-robot
+
 on:
   workflow_dispatch:
   schedule:
     # Beijing Time 08:45, every other day, reference https://crontab.guru/ and https://datetime360.com/cn/utc-beijing-time/
-    - cron: '45 0 */2 * *' 
+    - cron: "45 0 */2 * *"
 
 jobs:
-  robot:
-    name: robot
+  v2ex-robot:
+    name: v2ex-robot
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v1 
-      
-      - name: 'Setup Node'
+      - name: "Checkout"
+        uses: actions/checkout@v1
+
+      - name: "Setup Node"
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      
-      - name: 'Run App'
+
+      - name: "POST V2EX AD"
         env:
           V2EX_SESSION: ${{ secrets.V2EX_SESSION }}
           ROBOT_EMAIL_ADDR: ${{ secrets.ROBOT_EMAIL_ADDR }}
           ROBOT_EMAIL_AUTH_CODE: ${{ secrets.ROBOT_EMAIL_AUTH_CODE }}
           ROBOT_EMAIL_SMTP_ADDR: ${{ secrets.ROBOT_EMAIL_SMTP_ADDR }}
           MASTER_EMAIL_ADDR: ${{ secrets.MASTER_EMAIL_ADDR }}
-        run: npm i --silent && npm run start     
+        run: npm i --silent && npm run start:v2ex
