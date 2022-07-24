@@ -3,8 +3,9 @@ name: v2ex-robot
 on:
   workflow_dispatch:
   schedule:
-    # Beijing Time 08:45, every other day, reference https://crontab.guru/ and https://datetime360.com/cn/utc-beijing-time/
-    - cron: "45 0 */2 * *"
+    # Beijing Time 07:45, every other day, reference https://crontab.guru/ and https://datetime360.com/cn/utc-beijing-time/
+    # morning time before Beijing Time 11:00 seems not work , for example 45 0 */2 * *, don't know why
+    - cron: "45 23 */2 * *"
 
 jobs:
   v2ex-robot:

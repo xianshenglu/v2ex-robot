@@ -3,8 +3,9 @@ name: maimai-robot
 on:
   workflow_dispatch:
   schedule:
-    # Beijing Time 8:45/18:45, every day, reference https://crontab.guru/ and https://datetime360.com/cn/utc-beijing-time/
-    - cron: "45 0/10 * * *"
+    # Beijing Time 07:45/18:45, every day, reference https://crontab.guru/ and https://datetime360.com/cn/utc-beijing-time/
+    # morning time before Beijing Time 11:00 seems not work, for example 45 0,10 * * *, don't know why
+    - cron: "45 23,10 * * *"
 
 jobs:
   maimai-robot:
