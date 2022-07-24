@@ -22,7 +22,8 @@ jobs:
       - name: "POST MAIMAI AD"
         env:
           MAIMAI_USER_ID: ${{ secrets.MAIMAI_USER_ID }}
-          MAIMAI_COOKIE_VALUE: ${{ secrets.MAIMAI_COOKIE_VALUE }}
+          MAIMAI_CSRF_TOKEN: ${{ secrets.MAIMAI_CSRF_TOKEN }}
+          MAIMAI_ACCESS_TOKEN: ${{ secrets.MAIMAI_ACCESS_TOKEN }}
           MAIMAI_AD_TEXT: ${{ secrets.MAIMAI_AD_TEXT }}
           MASTER_EMAIL_ADDR: ${{ secrets.MASTER_EMAIL_ADDR }}
         run: npm i --silent && npm run start:maimai
