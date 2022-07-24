@@ -1,4 +1,4 @@
-import { getDefaultHttpClient } from "./baseHttpClient";
+import { getDefaultHttpClient } from "../../httpClients/baseHttpClient";
 
 export const maimaiHttpClient = getDefaultHttpClient();
 export const MAIMAI_API_ORIGIN = "https://maimai.cn";

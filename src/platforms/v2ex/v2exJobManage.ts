@@ -1,10 +1,10 @@
-import { NotificationService } from "./../notifications/index";
-import { v2exHttpClient, V2EX_API_ORIGIN } from "../httpClients/v2exHttpClient";
+import { NotificationService } from "../../notifications/index";
+import { v2exHttpClient, V2EX_API_ORIGIN } from "./v2exHttpClient";
 import { V2exSessionService } from "./v2exSessionService";
 import { JSDOM } from "jsdom";
 import { V2exCommonApi } from "./v2exCommonApi";
-import { ErrorHandler } from "../services/errorHandler";
-import { JobSourceManage } from "../services/jobSourceManage";
+import { ErrorHandler } from "../../services/errorHandler";
+import { JobSourceManage } from "../../services/jobSourceManage";
 type PostJobBody = {
   syntax: "markdown";
   once: number;
