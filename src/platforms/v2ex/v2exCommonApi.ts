@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { V2EX_API_ORIGIN, v2exHttpClient } from "../httpClients/v2exHttpClient";
+import { V2EX_API_ORIGIN, v2exHttpClient } from "./v2exHttpClient";
 import { Session } from "./v2exSessionService";
 
 export class V2exCommonApi {

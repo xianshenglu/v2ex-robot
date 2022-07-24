@@ -1,9 +1,6 @@
-import {
-  maimaiHttpClient,
-  MAIMAI_API_ORIGIN,
-} from "../httpClients/maimaiClient";
-import { NotificationService } from "../notifications";
-import { ErrorHandler } from "../services/errorHandler";
+import { maimaiHttpClient, MAIMAI_API_ORIGIN } from "./maimaiHttpClient";
+import { NotificationService } from "../../notifications";
+import { ErrorHandler } from "../../services/errorHandler";
 const env = process.env;
 export class MaiMaiAdService {
   errorHandler = new ErrorHandler();

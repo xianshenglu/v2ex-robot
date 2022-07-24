@@ -1,5 +1,5 @@
 import cookieParser from "set-cookie-parser";
-import { v2exHttpClient } from "../httpClients/v2exHttpClient";
+import { v2exHttpClient } from "./v2exHttpClient";
 import { V2exCommonApi } from "./v2exCommonApi";
 export type Session = {
   Cookie: string;

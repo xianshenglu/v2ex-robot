@@ -1,4 +1,4 @@
-import { getDefaultHttpClient } from "./baseHttpClient";
+import { getDefaultHttpClient } from "../../httpClients/baseHttpClient";
 export const v2exHttpClient = getDefaultHttpClient();
 export const V2EX_API_ORIGIN = "https://v2ex.com";
 
